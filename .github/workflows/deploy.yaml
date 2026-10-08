@@ -1,42 +1,43 @@
-name : Cloud Formation Stack Deployment
-on: 
-    push : 
-        branches :
-            - main
+name: Cloud Formation Stack Deployment
 
-    pull :
-        branches :
-            - main
-    
-    workflow_dispatch:
-        inputs:
-            actions:
-                description: "What do you want to do?"
-                required: true
-                default : "deploy"
-                type: choice
-                option :
-                    - deploy
-                    - destroy
+on:
+  push:
+    branches:
+      - main
 
-            environment:
-                description: "Environment to deploy"
-                required: true
-                default: "dev"
-                type: choice
-                options:
-                    - dev
-                    - prod
-            
-    env:
-        AWS_REGION: ${{secrets.AWS_REGION}}
-        AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
-        AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+  pull_request:
+    branches:
+      - main
 
-    jobs:
-        validate:
-            runs-on: ubuntu-latest
-            steps:
-                - name : Checkout source code
-                  uses: actions/checkout@v4
-                
+  workflow_dispatch:
+    inputs:
+      actions:
+        description: "What do you want to do?"
+        required: true
+        default: "deploy"
+        type: choice
+        options:
+          - deploy
+          - destroy
+
+      environment:
+        description: "Environment to deploy"
+        required: true
+        default: "dev"
+        type: choice
+        options:
+          - dev
+          - prod
+
+env:
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
